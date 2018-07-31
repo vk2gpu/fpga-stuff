@@ -69,14 +69,14 @@ begin
 		wait for 100 ns;
 		
 		i_clk <= '0';
-		i_vals(7 downto 0)   <= "01000000";
-		i_vals(15 downto 8)  <= "00100000";
-		i_vals(23 downto 16) <= "11100000";
-		i_vals(31 downto 24) <= "00000000";
-		i_vals(39 downto 32) <= "00000000";
-		i_vals(47 downto 40) <= "00000000";
-		i_vals(55 downto 48) <= "00000000";
 		i_vals(63 downto 56) <= "00000000";
+		i_vals(55 downto 48) <= "00000000";
+		i_vals(47 downto 40) <= "00000000";
+		i_vals(39 downto 32) <= "00000000";
+		i_vals(31 downto 24) <= "00000000";
+		i_vals(23 downto 16) <= "11100000";
+		i_vals(15 downto 8)  <= "00100000";
+		i_vals(7 downto 0)   <= "01000000";
 	--	11100000000000000000000000000000111000000000000000000000";
 		i_reset <= '1';
 

@@ -59,24 +59,30 @@ architecture rtl of gol is
 		return x + (y * size);
 	end GetIdx;
 
+	signal s_vals : std_logic_vector(63 downto 0);
+
 begin
+	-- Tie signal to output.
+	o_vals <= s_vals;
+
 	--  Component instantiation.
 	geni: for i in 0 to 63 generate
 		for gol_cell_xy : cell use entity work.gol_cell;
 	begin
+
 		gol_cell_xy: cell port map (
 			i_clk => i_clk,
 			i_reset => i_reset,
 			i_val => i_vals(i),
-			i_neighbours(0) => o_vals(GetIdx(8, i, -1, -1)),
-			i_neighbours(1) => o_vals(GetIdx(8, i, 0, -1)),
-			i_neighbours(2) => o_vals(GetIdx(8, i, 1, -1)),
-			i_neighbours(3) => o_vals(GetIdx(8, i, -1, 0)),
-			i_neighbours(4) => o_vals(GetIdx(8, i, 1, 0)),
-			i_neighbours(5) => o_vals(GetIdx(8, i, -1, 1)),
-			i_neighbours(6) => o_vals(GetIdx(8, i, 0, 1)),
-			i_neighbours(7) => o_vals(GetIdx(8, i, 1, 1)),
-			o_val => o_vals(i)
+			i_neighbours(0) => s_vals(GetIdx(8, i, -1, -1)),
+			i_neighbours(1) => s_vals(GetIdx(8, i, 0, -1)),
+			i_neighbours(2) => s_vals(GetIdx(8, i, 1, -1)),
+			i_neighbours(3) => s_vals(GetIdx(8, i, -1, 0)),
+			i_neighbours(4) => s_vals(GetIdx(8, i, 1, 0)),
+			i_neighbours(5) => s_vals(GetIdx(8, i, -1, 1)),
+			i_neighbours(6) => s_vals(GetIdx(8, i, 0, 1)),
+			i_neighbours(7) => s_vals(GetIdx(8, i, 1, 1)),
+			o_val => s_vals(i)
 		);
 	end generate geni;
 end rtl;

@@ -42,8 +42,6 @@ begin
 					o_val <= '0';
 				end if;
 			end if;
-			--o_val <= s_val;
 		end if;
 	end process p_clk;
-	
 end rtl;
