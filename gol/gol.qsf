@@ -38,7 +38,7 @@
 
 set_global_assignment -name FAMILY "Cyclone II"
 set_global_assignment -name DEVICE EP2C5T144C8
-set_global_assignment -name TOP_LEVEL_ENTITY gol
+set_global_assignment -name TOP_LEVEL_ENTITY top_level
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION "13.0 SP1"
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "08:03:46  AUGUST 01, 2018"
 set_global_assignment -name LAST_QUARTUS_VERSION "13.0 SP1"
@@ -56,7 +56,30 @@ set_global_assignment -name EDA_LMF_FILE altsyn.lmf -section_id eda_design_synth
 set_global_assignment -name EDA_INPUT_DATA_FORMAT VHDL -section_id eda_design_synthesis
 set_global_assignment -name EDA_SIMULATION_TOOL "ModelSim-Altera (VHDL)"
 set_global_assignment -name EDA_OUTPUT_DATA_FORMAT VHDL -section_id eda_simulation
-set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
+set_global_assignment -name VHDL_FILE top_level.vhd
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "3.3-V LVTTL"
+set_location_assignment PIN_17 -to i_clk
+set_location_assignment PIN_144 -to i_reset
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to i_reset
+set_location_assignment PIN_7 -to o_tick
+set_location_assignment PIN_3 -to o_status
+set_location_assignment EDGE_RIGHT -to o_cols[7]
+set_location_assignment EDGE_RIGHT -to o_cols[6]
+set_location_assignment EDGE_RIGHT -to o_cols[5]
+set_location_assignment EDGE_RIGHT -to o_cols[4]
+set_location_assignment EDGE_RIGHT -to o_cols[3]
+set_location_assignment EDGE_RIGHT -to o_cols[2]
+set_location_assignment EDGE_RIGHT -to o_cols[1]
+set_location_assignment EDGE_RIGHT -to o_cols[0]
+set_location_assignment EDGE_RIGHT -to o_rows[7]
+set_location_assignment EDGE_RIGHT -to o_rows[6]
+set_location_assignment EDGE_RIGHT -to o_rows[5]
+set_location_assignment EDGE_RIGHT -to o_rows[4]
+set_location_assignment EDGE_RIGHT -to o_rows[3]
+set_location_assignment EDGE_RIGHT -to o_rows[2]
+set_location_assignment EDGE_RIGHT -to o_rows[1]
+set_location_assignment EDGE_RIGHT -to o_rows[0]
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
