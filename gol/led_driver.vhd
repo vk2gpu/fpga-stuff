@@ -22,20 +22,35 @@ end led_driver;
 -- LED driver entity architecture
 ---------------------------------------------------
 architecture rtl of led_driver is
-	constant c_CNT_1HZ		: natural := 25000000;
-	constant c_ROW_TIME		: natural := c_CNT_1HZ / ( 120 * 8 );
-
 	signal s_row_clk			: std_logic := '0';
-	signal s_row_clk_count	: natural range 0 to c_ROW_TIME := 0;
 	signal s_row_idx			: natural range 0 to 7 := 0;
 	signal s_row_data			: std_logic_vector(7 downto 0);
-	
 	signal s_row8				: natural range 0 to (7*8);
 	signal s_row_sel			: unsigned(7 downto 0);
 
+	component clock_divider is
+		generic (
+			count : integer
+		);
+		port (
+			i_clk : in std_logic;
+			i_reset : in std_logic;
+			o_clk : out std_logic
+		);
+	end component;	
+
 begin
+	row_clock_comp: clock_divider
+		generic map(
+			count => (25000000 / (120 * 8))
+		)
+		port map(
+			i_clk => i_clk,
+			i_reset => '0',
+			o_clk => s_row_clk
+		);
+
 	process(s_row_clk, i_data) is
-				
 	begin
 		if rising_edge(s_row_clk) then
 			-- Copy in row.
@@ -51,18 +66,6 @@ begin
 				s_row_idx <= s_row_idx + 1;
 			else
 				s_row_idx <= 0;
-			end if;
-		end if;
-	end process;
-	
-	process(i_clk) is
-	begin
-		if rising_edge(i_clk) then
-			if s_row_clk_count = (c_ROW_TIME - 1) then
-				s_row_clk <= not s_row_clk;
-				s_row_clk_count <= 0;
-			else
-				s_row_clk_count <= s_row_clk_count + 1;
 			end if;
 		end if;
 	end process;

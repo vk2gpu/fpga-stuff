@@ -66,7 +66,6 @@ begin
 		o_vals => s_sim_out
 	);
 	
-	-- 
 	led_driver_comp: led_driver port map(
 		i_clk => i_clk,
 		i_data => s_sim_out,
@@ -84,5 +83,5 @@ begin
 			o_clk => s_sim_clk
 		);
 
-	o_tick <= s_sim_clk ;
+	o_tick <= s_sim_clk;
 end rtl;
