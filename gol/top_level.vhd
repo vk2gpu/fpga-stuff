@@ -24,10 +24,6 @@ end top_level;
 -- Top level entity architecture
 ---------------------------------------------------
 architecture rtl of top_level is
-	constant c_CNT_1HZ		: natural := 25000000;
-	constant c_SIM_CNT		: natural := c_CNT_1HZ / 2;
-
-	signal r_sim_count		: natural range 0 to c_SIM_CNT;
 	signal s_sim_clk			: std_logic := '0';
 	signal s_sim_out			: std_logic_vector(63 downto 0);
 	
@@ -39,28 +35,54 @@ architecture rtl of top_level is
 			o_vals : out std_logic_vector(63 downto 0)
 		);
 	end component;
+
+	component led_driver
+		port (
+			i_clk : in std_logic;
+			
+			i_data : in std_logic_vector(63 downto 0);
+			o_rows : out std_logic_vector(7 downto 0);
+			o_cols : out std_logic_vector(7 downto 0)
+		);
+	end component;
 	
-begin
-	gol_sim: gol port map (
+
+	component clock_divider is
+		generic (
+			count : integer
+		);
+		port (
+			i_clk : in std_logic;
+			i_reset : in std_logic;
+			o_clk : out std_logic
+		);
+	end component;	
+		
+begin	
+	gol_comp: gol port map (
 		i_clk => s_sim_clk,
-		i_reset => i_reset,
-		i_vals => "0000000011100000000000000000000000000000111000000000000000000000",
+		i_reset => not i_reset,
+		i_vals => "0000000000000000000000000000000000000000111000000010000001000000",
 		o_vals => s_sim_out
 	);
 	
-	o_status <= i_reset;
-	o_rows <= "10101010";
-	o_cols <= "10101010";
+	-- 
+	led_driver_comp: led_driver port map(
+		i_clk => i_clk,
+		i_data => s_sim_out,
+		o_cols => o_cols,
+		o_rows => o_rows
+	);
 	
-	process(i_clk, s_sim_clk, r_sim_count) is
-	begin
-		if r_sim_count = (c_SIM_CNT - 1) then
-			o_tick <= not s_sim_clk;
-			s_sim_clk <= not s_sim_clk;
-			r_sim_count <= 0;
-		else
-			r_sim_count <= r_sim_count + 1;
-		end if;
-	end process;
+	sim_clk_comp: clock_divider
+		generic map(
+			count => (25000000 / 16)
+		)
+		port map(
+			i_clk => i_clk,
+			i_reset => '0',
+			o_clk => s_sim_clk
+		);
 
+	o_tick <= s_sim_clk ;
 end rtl;
