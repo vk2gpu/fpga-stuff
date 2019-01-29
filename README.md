@@ -1,7 +1,7 @@
-VHDL Stuff
+FPGA Stuff
 ==========
 
-This repo is for storing bits and piece of VHDL as I learn. Testbenches should run in GHDL, so no FPGA or CPLD should be required to have a look.
+This repo is for storing bits and pieces of VHDL, Verilog, other FPGA bits as I learn. Testbenches should run in GHDL, so no FPGA or CPLD should be required to have a look.
 
 gol
 ---
