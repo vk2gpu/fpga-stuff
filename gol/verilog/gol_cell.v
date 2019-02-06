@@ -8,27 +8,25 @@ module gol_cell (
     input [7:0] i_neighbours,
     output reg o_val
 );
-	integer v_neighbours;
+	parameter [8:0] LIVE_STATE = 9'b000001000;
+	parameter [8:0] DIE_STATE  = 9'b111110011;
+	integer v_num_neighbours;
 	integer i;
 
 	always @(posedge i_clk) begin
 		if(i_reset) begin
 			o_val <= i_val;
-		end else begin
-			v_neighbours <= 0;
-			for(i = 0; i < 7; i=i+1) begin
-				if (i_neighbours[i]) begin
-					v_neighbours <= v_neighbours + 1;
-				end
+		end
+		else begin
+			v_num_neighbours = 0;
+			for(i = 0; i < 8; i=i+1) begin
+				v_num_neighbours = v_num_neighbours + i_neighbours[i];
 			end
-			
-			if(v_neighbours == 3) begin
+
+			if(LIVE_STATE[v_num_neighbours])
 				o_val <= 1;
-			end else begin 
-				if (v_neighbours < 2 || v_neighbours > 3) begin
-					o_val <= 0;
-				end
-			end
+			if (DIE_STATE[v_num_neighbours])
+				o_val <= 0;
 		end
 	end
 endmodule

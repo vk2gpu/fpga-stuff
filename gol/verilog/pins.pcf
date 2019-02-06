@@ -42,7 +42,6 @@
 ###############################################################################
 
 set_io --warn-no-port i_clk B2
-set_io --warn-no-port i_reset G1			# No button here...
 set_io --warn-no-port o_tick B3
 
 set_io --warn-no-port o_rows[0] A2

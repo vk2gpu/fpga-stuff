@@ -5,7 +5,7 @@ module gol(
 	input i_clk,
 	input i_reset,
 	input [63:0] i_vals,
-	output [63:0] o_vals
+	output reg [63:0] o_vals
 	);
 
 	function integer get_idx;
@@ -36,30 +36,39 @@ module gol(
 		end
 	endfunction
 
-	wire [63:0] s_vals;
+	wire [63:0] s_next_vals;
 
-	assign o_vals = s_vals;
+	reg [7:0] s_reset_delay = 2;
 
-	genvar i;
-	generate
-		for (i=0; i<64; i=i+1) begin : gen_gol_cell_xy
-		gol_cell gol_cell_xy (
-			.i_clk(i_clk),
-			.i_reset(i_reset),
-			.i_val(i_vals[i]),
-			.i_neighbours(
-				{
-					s_vals[get_idx(8, i, -1, -1)],
-					s_vals[get_idx(8, i, 0, -1)],
-					s_vals[get_idx(8, i, 1, -1)],
-					s_vals[get_idx(8, i, -1, 0)],
-					s_vals[get_idx(8, i, 1, 0)],
-					s_vals[get_idx(8, i, -1, 1)],
-					s_vals[get_idx(8, i, 0, 1)],
-					s_vals[get_idx(8, i, 1, 1)]
-				}),
-			.o_val(s_vals[i])
-		);
+	always @(posedge i_clk) begin
+		if(i_reset || s_reset_delay != 0) begin
+			o_vals <= i_vals;
+			s_reset_delay <= s_reset_delay - 1;
+		end else begin		
+			o_vals <= s_next_vals;
+		end
 	end
+
+	genvar i, j;
+	generate
+		for (i=0; i<64; i=i+1) begin : gen_gol_cell_x
+			gol_cell gol_cell_xy (
+				.i_clk(i_clk),
+				.i_reset(i_reset || s_reset_delay != 0),
+				.i_val(i_vals[i]),
+				.i_neighbours(
+					{
+						s_next_vals[get_idx(8, i, -1, -1)],
+						s_next_vals[get_idx(8, i, 0, -1)],
+						s_next_vals[get_idx(8, i, 1, -1)],
+						s_next_vals[get_idx(8, i, -1, 0)],
+						s_next_vals[get_idx(8, i, 1, 0)],
+						s_next_vals[get_idx(8, i, -1, 1)],
+						s_next_vals[get_idx(8, i, 0, 1)],
+						s_next_vals[get_idx(8, i, 1, 1)]
+					}),
+				.o_val(s_next_vals[i])
+			);
+		end
 	endgenerate
 endmodule
